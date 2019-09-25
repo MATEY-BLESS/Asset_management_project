@@ -25,6 +25,7 @@ Route::group(['middleware' => ['auth']], function () {
 	Route::get('assets/{asset}/schedule', 'AssetsController@schedule')->name('assets.schedule');
 	Route::patch('assets/{asset}/schedule', 'AssetsController@scheduleMaintenance')->name('patch.assets.schedule');
 	Route::resource('assets', 'AssetsController');
+	Route::resource('asset_registration_links', 'AssetRegistrationLinkController');
 	Route::resource('location', 'LocationController');
 	Route::resource('users', 'UsersTableController');
 	Route::resource('maintenance', 'MaintenanceActivitiesController');
