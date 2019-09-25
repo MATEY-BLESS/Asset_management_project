@@ -53,8 +53,7 @@ class AssetsController extends Controller
                 'date_commenced' => 'required',
                 'date_acquired' => 'required|date',
                 'location_id'=>'required',
-            ], 
-        );
+            ]);
 
         if ($validator->fails()) {
             // return $request;
@@ -74,8 +73,7 @@ class AssetsController extends Controller
         {
             $validator=Validator::make($request->all(), [
                 'next_maintenance_date' => 'required|date',
-            ],
-        );
+            ]);
 
          if ($validator->fails()) {
             // return $request;
@@ -144,8 +142,7 @@ class AssetsController extends Controller
                 'date_commenced' => 'required',
                 'date_acquired' => 'required|date',
                 'location_id'=>'required',
-            ],
-        );
+            ]);
 
         $asset = Asset::find($id);
 

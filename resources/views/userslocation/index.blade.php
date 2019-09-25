@@ -67,11 +67,11 @@
                                 <option value="{{$users->id}}">{{$users->username}}</option>
                             @endforeach
                         </select>
-                        @error('name')
+                        <!-- @error('name')
                             <span class="invalid-feedback text-danger" role="alert">
-                                <strong>{{ $message }}</strong>
+                                <strong></strong>
                             </span>
-                         @enderror
+                         @enderror -->
                     </div>
                     </div>
                    
@@ -83,11 +83,11 @@
                                 <option value="{{$location->id}}">{{$location->name}}</option>
                             @endforeach
                         </select>
-                        @error('location_id')
+                        <!-- @error('location_id')
                             <span class="invalid-feedback text-danger" role="alert">
-                                <strong>{{ $message }}</strong>
+                                <strong></strong>
                             </span>
-                         @enderror
+                         @enderror -->
                     </div>
                     </div>
                    
