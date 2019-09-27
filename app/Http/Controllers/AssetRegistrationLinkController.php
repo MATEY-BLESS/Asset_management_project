@@ -18,6 +18,7 @@ class AssetRegistrationLinkController extends Controller
      */
     public function index()
     {
+
         $data['asset_registration_links'] = AssetRegistrationLink::with(['locations', 'type'])->get();
         
         return view('asset_registration_links.index', $data);
@@ -92,7 +93,8 @@ class AssetRegistrationLinkController extends Controller
      */
     public function edit(AssetRegistrationLink $assetRegistrationLink)
     {
-        //
+        $data['asset_registration_link'] = $assetRegistrationLink;
+        return view('asset_registration_links.edit', $data);
     }
 
     /**
@@ -104,7 +106,24 @@ class AssetRegistrationLinkController extends Controller
      */
     public function update(Request $request, AssetRegistrationLink $assetRegistrationLink)
     {
-        //
+        $input_data = $request->all();
+
+        $validator=Validator::make($input_data, [
+                'caption' => 'required',
+                'type_id' =>'required|numeric',
+                'description' => 'required',
+                'expiry_date' => 'required|date',
+            ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+      $assetRegistrationLink->update($input_data);
+
+      return redirect(route('asset_registration_links.show'))->with('success', 'Asset Registration Link updated successfully');
     }
 
     /**

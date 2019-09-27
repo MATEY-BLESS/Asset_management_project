@@ -6,7 +6,7 @@
     <div class="">
         <div class="page-title">
             <div class="title_left">
-            <h3>Create Asset Registeration Link</h3>
+            <h3>Edit Asset Registration Link</h3>
             </div>
 
             <div class="title_right">
@@ -27,7 +27,7 @@
             <div class="col-md-7 col-xs-12 col-md-offset-1">
             <div class="x_panel">
                 <div class="x_title">
-                
+             
                 <ul class="nav navbar-right panel_toolbox">
                     <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                     </li>
@@ -56,13 +56,14 @@
                         </ul>
                     </div>
                 @endif
-                <form class="form-horizontal form-label-left" action="{{route ('asset_registration_links.store')}}" method="POST">
+                <form class="form-horizontal form-label-left" action="{{route('asset_registration_links.update', $asset_registration_link->id) }}" method="POST">
+                  {{method_field('PATCH')}}
                   {{csrf_field()}}
                    <div class="box-body">
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Caption</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="text" name="caption" class="form-control" placeholder="E. g. City Campus Asset 2019 Census" value="{{old('caption')}}">
+                            <input type="text" name="caption" class="form-control" placeholder="E. g. City Campus Asset 2019 Census" value="{{old('caption')?old('caption'):$asset_registration_link->caption}}">
                              <!-- @error('name')
                                     <span class="invalid-feedback text-danger" role="alert">
                                         <strong></strong>
@@ -74,7 +75,7 @@
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Description</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <textarea  name="description" class="form-control" value="{{old('description')}}"></textarea>
+                            <textarea  name="description" class="form-control">{{old('description')? old('description'): $asset_registration_link->description}}</textarea>
                              <!-- @error('name')
                                     <span class="invalid-feedback text-danger" role="alert">
                                         <strong></strong>
@@ -98,27 +99,11 @@
                              @enderror -->
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Location</label>
-                        <div class="col-md-9 col-sm-9 col-xs-12">
-                            <select class="form-control" name="location_id">
-                                 @foreach(\App\Location::all()->sortBy('name') as $location)
-                                    <option value="{{$location->id}}">{{$location->name}}</option>
-                                @endforeach
-                            </select>
-                            <!-- @error('location_id')
-                                <span class="invalid-feedback text-danger" role="alert">
-                                    <strong></strong>
-                                </span>
-                             @enderror -->
-                        </div>
-                    </div>
                     
                     <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12">Expiry Date</label>
                         <div class="col-md-9 col-sm-9 col-xs-12">
-                            <input type="date" name="expiry_date"class="form-control" value="{{old('expiry_date')}}">
+                            <input type="date" name="expiry_date"class="form-control" value="{{old('expiry_date')?old('expiry_date'):$asset_registration_link->expiry_date}}">
                              <!-- @error('expiry_date')
                                 <span class="invalid-feedback text-danger" role="alert">
                                     <strong></strong>

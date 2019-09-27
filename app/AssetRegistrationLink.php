@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class AssetRegistrationLink extends Model
 {
 	// protected $table = 'asset_registration_link_locations';
-    protected $fillable = ['caption', 'description', 'type_id', 'token', 'expiry', 'added_by_id'];
+    protected $fillable = ['caption', 'description', 'type_id', 'token', 'expiry_date', 'added_by_id'];
 
 
     public function getLinkAttribute()
@@ -22,8 +22,18 @@ class AssetRegistrationLink extends Model
         return $this->belongsTo('App\AssetRegistrationLinkType');
     }
 
+    public function addedBy()
+    {           
+        return $this->belongsTo('App\User', 'added_by_id');
+    }
+
     public function locations()
     {
         return $this->belongsToMany('App\Location', 'asset_reg_link_locations');
+    }
+
+    public function assets()
+    {
+        return $this->belongsToMany('App\Asset', 'asset_asset_reg_links');
     }
 }

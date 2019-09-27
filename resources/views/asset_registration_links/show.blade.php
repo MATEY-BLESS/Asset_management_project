@@ -50,7 +50,7 @@
                           <i class="fa fa-link user-profile-icon"> Link:</i> <span style="word-wrap: break-word; color: #2A3F54;"> {{$asset_registration_link->link}} </span>
                         </li>
                         <li>
-                          <i class="fa fa-bank user-profile-icon"> Locations:</i> {{{count($asset_registration_link->locations)}}}
+                          <i class="fa fa-map-marker user-profile-icon"> Locations:</i> {{{count($asset_registration_link->locations)}}}
                         </li>
                          <li>
                           <i class="fa fa-box user-profile-icon"> Type:</i> {{$asset_registration_link->type? $asset_registration_link->type->name :''}}  
@@ -58,7 +58,7 @@
                       </ul>
 
 
-                      <a class="btn btn-success" href="{{route('asset_registration_links.edit', ['id'=>$asset_registration_link->id])}}"><i class="fa fa-edit m-right-xs"></i>Edit Location</a>
+                      <a class="btn btn-success" href="{{route('asset_registration_links.edit', ['id'=>$asset_registration_link->id])}}"><i class="fa fa-edit m-right-xs"></i> Edit Location</a>
                       <br />
 
                       <!-- Start Table -->
@@ -81,7 +81,7 @@
                                 <thead>
                                 <tr>
                                     <th>Created By</th>
-                                    <td>{{$asset_registration_link->parent? $asset_registration_link->parent->name : ''}}</td>
+                                    <td>{{$asset_registration_link->addedBy? $asset_registration_link->addedBy->username : ''}}</td>
                                 </thead>
                               </tr>
                                 <tbody>
@@ -148,16 +148,13 @@
                                             <td>{{$location->organization ? $location->organization->name : ''}}</td>
                                           
                                             <!-- <td>{{$location->user_name}}</td> -->
-                                            <td class="text-center">{{count($location->assets)}}</td>
+                                            <td class="text-center">{{count($location->assetsAddedViaLink($asset_registration_link))}}</td>
                             
                                             <td class="text-center">
-                                                <a href="{{route('location.show', ['id'=>$location->id])}}">
+                                                <a href="#{{route('location.show', ['id'=>$location->id])}}">
                                                     <i class="fa fa-search-plus text-info"></i>
                                                 </a>
-                                                <a href="{{route('location.edit', ['id'=>$location->id])}}">
-                                                    <i class="fa fa-edit text-warning"></i>
-                                                </a>
-                                                <a href="{{route('location.destroy', ['id' => $location->id])}}" onclick="event.preventDefault(); confirm('Are you sure?', document.getElementById('delete-location-form-{{$location->id}}').submit());">
+                                                <a href="#{{route('location.destroy', ['id' => $location->id])}}" onclick="//event.preventDefault(); confirm('Are you sure?', document.getElementById('delete-location-form-{{$location->id}}').submit());">
                                                     <i class="fa fa-trash text-danger"></i>
                                                 </a>
 
@@ -177,34 +174,51 @@
                            </div>
                           <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
 
-                            <!-- start user projects -->
-                            <table class="data table table-striped no-margin">
-                              <thead>
-                                <tr>
-                                  <th>#</th>
-                                  <th>Username</th>
-                                  <th>Email</th>
-                                  <th>Type</th>
-                                </tr>
-                              </thead>
-                             
-                              <tbody>
-                                @foreach($asset_registration_link->locations as $key=> $location)
-                                <tr>
-                                  <td></td>
-                                  <td></td>
-                                  <td></td>
-                                  <td class="text-center"></td>
-                                </tr>
-                                @endforeach
-                               
-                              </tbody>
-                            </table>
-                            <!-- end user projects -->
+                            
 
                           </div>
                           <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
-                            <p> </p>
+                            <table id="datatable" class="table table-striped table-bordered">
+                              <thead>
+                              <tr>
+                                  <th>#.</th>
+                                  <th>Name</th>
+                                  <th>Type</th>
+                                  <th>Added By</th>
+                                  <th>Added At</th>
+                                  <th class="text-center">Actions</th>
+                              </tr>
+                              </thead>
+
+
+                              <tbody><?php $cnt = 0; ?>
+                                  @foreach($asset_registration_link->assets->sortByDesc('created_at') as $key => $asset)
+                                      <tr><?php $cnt++; ?>
+                                          <td>{{1+$cnt}}.</td>
+                                          <td>{{$asset->name}}</td>
+                                          <td>{{$asset->type ? $asset->type->name : ''}}</td>
+                                          <td>{{$asset->addedBy? $asset->addedBy->name: ''}}</td>
+                                          <td>{{$asset->created_at}}</td>
+                                          <td class="text-center">
+                                              <a href="{{route('assets.show', ['id'=>$asset->id])}}">
+                                                  <i class="fa fa-search-plus text-info"></i>
+                                              </a>
+                                              <a href="{{route('assets.edit', ['id'=>$asset->id])}}">
+                                                  <i class="fa fa-edit text-warning"></i>
+                                              </a>
+                                              <a href="{{route('assets.destroy', ['id' => $asset->id])}}" onclick="event.preventDefault(); confirm('Are you sure you want to delete Asset?', document.getElementById('delete-asset-form-{{$asset->id}}').submit());">
+                                                  <i class="fa fa-trash text-danger"></i>
+                                              </a>
+
+                                              <form id="delete-asset-form-{{$asset->id}}" action="{{ route('assets.destroy', ['id' => $asset->id]) }}" method="POST" style="display: none;">
+                                                  {{ method_field('DELETE') }}
+                                                  {{ csrf_field() }}
+                                              </form>
+                                          </td>
+                                      </tr>
+                                  @endforeach
+                              </tbody>
+                          </table>
                           </div>
                         </div>
                       </div>

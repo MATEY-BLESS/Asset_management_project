@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Asset;
 use App\AssetRegistrationLink;
+use App\AssetAssetRegistrationLink;
 use App\User;
 use App\Location;
 use Illuminate\Http\Request;
 use \Validator;
 use Illuminate\Validation\Rule;
+use \Auth;
 
 class AssetsController extends Controller
 {
@@ -51,8 +53,8 @@ class AssetsController extends Controller
                 'name' => 'required',
                 'type_id' =>'required|numeric',
                 'tag' => 'required',
-                'date_commenced' => 'required',
-                'date_acquired' => 'required|date',
+                'date_commenced' => 'required|date',
+                // 'date_acquired' => 'required|date',
                 'location_id'=>'required',
             ]);
 
@@ -102,8 +104,8 @@ class AssetsController extends Controller
             'name' => 'required',
             'type_id' =>'required|numeric',
             'tag' => 'required',
-            'date_commenced' => 'required',
-            'date_acquired' => 'required|date',
+            'date_commenced' => 'required|date',
+            'date_acquired' => 'required',
             'location_id'=>'required',
         ]);
 
@@ -116,9 +118,10 @@ class AssetsController extends Controller
 
        $data = $request->all();
 
-       Asset::create($data);
+       $asset = Asset::create($data);
+       AssetAssetRegistrationLink::create(['asset_registration_link_id' => $link->id, 'asset_id' => $asset->id, 'added_by_id' => Auth::user()->id]);
 
-       return redirect(route('assets.index'));
+       return redirect(route('assets.register_via_closed_link', ['token' => $token]));
     }
 
      public function scheduleMaintenance(Request $request, $asset_id)

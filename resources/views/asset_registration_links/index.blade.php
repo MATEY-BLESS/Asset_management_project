@@ -29,6 +29,9 @@
             <div class="x_title">
             <h2>List of Asset Registration Links</h2>
             <ul class="nav navbar-right panel_toolbox">
+                <li>
+                    <a href="{{route('asset_registration_links.create')}}" class="btn btn-link btn-xs">Create Link</a>
+                </li>
                 <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                 </li>
                 <li class="dropdown">
@@ -55,6 +58,7 @@
                     <th>Type</th>
                     <th>Expiry</th>
                     <th>Locations</th>
+                    <th>Assets</th>
                     <th>Added By</th>
                     <th class="text-center">Actions</th>
                 </tr>
@@ -70,7 +74,8 @@
                             <td>{{$asset_registration_link->type ? $asset_registration_link->type->name : ''}}</td>
                             <td>{{$asset_registration_link->expiry_date}}</td>
                             <td>{{count($asset_registration_link->locations)}}</td>
-                            <td>{{$asset_registration_link->addedBy? $asset_registration_link->addedBy->name : ''}}</td>
+                            <td>{{count($asset_registration_link->assets)}}</td>
+                            <td>{{$asset_registration_link->addedBy? $asset_registration_link->addedBy->username : ''}}</td>
                             <td class="text-center">
                                 <a href="{{route('asset_registration_links.show', ['id'=>$asset_registration_link->id])}}">
                                     <i class="fa fa-search-plus text-info"></i>

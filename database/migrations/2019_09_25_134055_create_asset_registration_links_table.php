@@ -20,7 +20,7 @@ class CreateAssetRegistrationLinksTable extends Migration
             $table->string('description',512)->nullable();
             $table->integer('type_id')->nullable()->unsigned()->index();
             $table->string('token',64)->nullable();
-            $table->date('expiry')->nullable();
+            $table->date('expiry_date')->nullable();
             $table->integer('added_by_id')->nullable()->unsigned()->index();
 
             $table->softDeletes();
