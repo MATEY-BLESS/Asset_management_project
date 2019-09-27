@@ -18,6 +18,8 @@ Route::get('login', function () {
 })->name('login');
 
 Route::get('home', 'HomeController@index')->name('home');
+Route::get('assets/register_via_closed_link/{token}', 'AssetsController@createViaLink')->name('assets.register_via_closed_link');
+Route::post('assets/store_via_closed_link/{token}', 'AssetsController@storeViaClosedLink')->name('assets.store_via_closed_link');
 	
 Route::group(['middleware' => ['auth']], function () {
  

@@ -72,17 +72,17 @@
                             <td>{{count($asset_registration_link->locations)}}</td>
                             <td>{{$asset_registration_link->addedBy? $asset_registration_link->addedBy->name : ''}}</td>
                             <td class="text-center">
-                                <a href="{{route('assets.show', ['id'=>$asset_registration_link->id])}}">
+                                <a href="{{route('asset_registration_links.show', ['id'=>$asset_registration_link->id])}}">
                                     <i class="fa fa-search-plus text-info"></i>
                                 </a>
-                                <a href="{{route('assets.edit', ['id'=>$asset_registration_link->id])}}">
+                                <a href="{{route('asset_registration_links.edit', ['id'=>$asset_registration_link->id])}}">
                                     <i class="fa fa-edit text-warning"></i>
                                 </a>
-                                <a href="{{route('assets.destroy', ['id' => $asset_registration_link->id])}}" onclick="event.preventDefault(); confirm('Are you sure you want to delete Asset?', document.getElementById('delete-asset-form-{{$asset_registration_link->id}}').submit());">
+                                <a href="{{route('asset_registration_links.destroy', ['id' => $asset_registration_link->id])}}" onclick="event.preventDefault(); confirm('Are you sure you want to delete Asset Registration Link?', document.getElementById('delete-asset-form-{{$asset_registration_link->id}}').submit());">
                                     <i class="fa fa-trash text-danger"></i>
                                 </a>
 
-                                <form id="delete-asset-form-{{$asset_registration_link->id}}" action="{{ route('assets.destroy', ['id' => $asset_registration_link->id]) }}" method="POST" style="display: none;">
+                                <form id="delete-asset_registration_link-form-{{$asset_registration_link->id}}" action="{{ route('asset_registration_links.destroy', ['id' => $asset_registration_link->id]) }}" method="POST" style="display: none;">
                                     {{ method_field('DELETE') }}
                                     {{ csrf_field() }}
                                 </form>

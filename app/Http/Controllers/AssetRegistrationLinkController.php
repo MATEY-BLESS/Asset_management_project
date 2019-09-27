@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\AssetRegistrationLink;
+use App\AssetRegistrationLinkLocation;
 use Illuminate\Http\Request;
 
 use \Validator;
+use \Auth;
 
 class AssetRegistrationLinkController extends Controller
 {
@@ -45,7 +47,7 @@ class AssetRegistrationLinkController extends Controller
                 'type_id' =>'required|numeric',
                 'description' => 'required',
                 'expiry_date' => 'required|date',
-                'location_ids'=>'required',
+                'location_id'=>'required|numeric',
             ]);
 
         if ($validator->fails()) {
@@ -56,8 +58,14 @@ class AssetRegistrationLinkController extends Controller
         }
 
        $data = $request->all();
+       $data['token'] = str_random(40);
+       $data['added_by_id'] = Auth::user()->id;
 
-       AssetRegistrationLink::create($data);
+       $arl = AssetRegistrationLink::create($data);
+
+       AssetRegistrationLinkLocation::create(['asset_registration_link_id' => $arl->id, 'location_id' => $data['location_id'], 'added_by_id' => Auth::user()->id]);
+
+       // return $arl->locations;
 
        return redirect(route('asset_registration_links.index'));
     }
@@ -68,9 +76,12 @@ class AssetRegistrationLinkController extends Controller
      * @param  \App\AssetRegistrationLink  $assetRegistrationLink
      * @return \Illuminate\Http\Response
      */
-    public function show(AssetRegistrationLink $assetRegistrationLink)
+    public function show($asset_registration_link_id)
     {
-        //
+        // User::find(6)->impliedLocations();
+        $data['asset_registration_link'] = AssetRegistrationLink::with('locations')->where('id', $asset_registration_link_id)->first();
+        
+        return view('asset_registration_links.show', $data);
     }
 
     /**

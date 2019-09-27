@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Asset;
+use App\AssetRegistrationLink;
 use App\User;
 use App\Location;
 use Illuminate\Http\Request;
@@ -57,6 +58,57 @@ class AssetsController extends Controller
 
         if ($validator->fails()) {
             // return $request;
+            return redirect(route('assets.create'))
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+       $data = $request->all();
+
+       Asset::create($data);
+
+       return redirect(route('assets.index'));
+    }
+
+    public function createViaLink($token)
+    {
+        $links = AssetRegistrationLink::where('token',$token);
+
+        if(count($links->get()) > 0)
+        {
+            $link = $links->first();
+        } else {
+            return redirect('home');
+        }
+
+        $data['locations'] = $link->locations;
+        $data['token'] = $token;
+
+        return view('assets.create_via_closed_link', $data);
+    }
+
+    public function storeViaClosedLink(Request $request, $token)
+    {
+        $links = AssetRegistrationLink::where('token',$token);
+
+        if(count($links->get()) > 0)
+        {
+            $link = $links->first();
+        } else {
+            return redirect('home');
+        }
+
+        $validator=Validator::make($request->all(), [
+            'name' => 'required',
+            'type_id' =>'required|numeric',
+            'tag' => 'required',
+            'date_commenced' => 'required',
+            'date_acquired' => 'required|date',
+            'location_id'=>'required',
+        ]);
+
+
+        if ($validator->fails()) {
             return redirect(route('assets.create'))
                         ->withErrors($validator)
                         ->withInput();
